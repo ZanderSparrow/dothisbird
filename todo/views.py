@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+
+# Home
+def home(request):
+    return render(request, 'todo/home.html')
 
 # Auth
 def signupuser(request):
@@ -25,6 +29,14 @@ def signupuser(request):
 
     else:
         return render(request, 'todo/signupuser.html', {'form': UserCreationForm()})
+
+def loginuser(request):
+    pass
+
+def logoutuser(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('home')
 
 
 # Todo
