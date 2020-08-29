@@ -20,7 +20,7 @@
       </form>
     {% else %}
       <a href="{% url 'signupuser' %}">Signup</a>
-      <a href="#">Login</a>
+      <a href="{% url 'loginuser' %}">Login</a>
     {% endif %}
     <div class="container">
       {% block content %}

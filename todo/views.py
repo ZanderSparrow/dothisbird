@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 
@@ -31,7 +31,16 @@ def signupuser(request):
         return render(request, 'todo/signupuser.html', {'form': UserCreationForm()})
 
 def loginuser(request):
-    pass
+    if request.method == 'POST':
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'todo/loginuser.html', {'form': AuthenticationForm(), 'error': 'Unable to log in. Please try again.'})
+        else:
+            login(request, user)
+            return redirect('todos')
+
+    else:
+        return render(request, 'todo/loginuser.html', {'form': AuthenticationForm()})
 
 def logoutuser(request):
     if request.method == 'POST':
