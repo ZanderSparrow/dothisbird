@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -15,6 +15,7 @@ def signupuser(request):
                 user = User.objects.create_user(request.POST['username'], password=request.POST['password1'])
                 user.save()
                 login(request, user)
+                redirect('todos')
             except IntegrityError:
                 return render(request, 'todo/signupuser.html', {'form': UserCreationForm(), 'error': 'That username is already taken. Please choose another username.'})
         else:
@@ -29,4 +30,3 @@ def signupuser(request):
 # Todo
 def todos(request):
     return render(request, 'todo/todos.html', {'todos': []})
-    
