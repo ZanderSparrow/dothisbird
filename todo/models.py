@@ -16,4 +16,7 @@ class ToDo(models.Model):
     urgent = models.BooleanField(default=False)
 
     # Completed boolean
-    completed = models.DateTimeField(null=True)
+    completed = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.title
