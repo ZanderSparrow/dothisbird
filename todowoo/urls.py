@@ -28,4 +28,5 @@ urlpatterns = [
 
     # Todos
     path('todos/', views.todos, name='todos'),
+    path('create/', views.createtodo, name='createtodo'),
 ]

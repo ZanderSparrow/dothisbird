@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from .forms import TodoForm
 
 # Home
 def home(request):
@@ -51,3 +52,16 @@ def logoutuser(request):
 # Todo
 def todos(request):
     return render(request, 'todo/todos.html', {'todos': []})
+
+def createtodo(request):
+    if request.method == 'POST':
+        try:
+            form = TodoForm(request.POST)
+            new_todo = form.save(commit=False)
+            new_todo.user = request.user
+            new_todo.save()
+            return redirect('todos')
+        except ValueError:
+            return render(request, 'todo/createtodo.html', {'form': TodoForm(), 'error': 'Bad data'})
+    else:
+        return render(request, 'todo/createtodo.html', {'form': TodoForm()})
