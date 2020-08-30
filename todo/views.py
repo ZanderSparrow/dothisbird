@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from .forms import TodoForm
+from .models import ToDo
 
 # Home
 def home(request):
@@ -51,7 +52,12 @@ def logoutuser(request):
 
 # Todo
 def todos(request):
-    return render(request, 'todo/todos.html', {'todos': []})
+    todos = ToDo.objects.filter(user=request.user, completed__isnull=True)
+    return render(request, 'todo/todos.html', {'todos': todos})
+
+def viewtodo(request, todo_pk):
+    todo = get_object_or_404(ToDo, pk=todo_pk)
+    return render(request, 'todo/viewtodo.html', {'todo': todo})
 
 def createtodo(request):
     if request.method == 'POST':

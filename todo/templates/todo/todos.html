@@ -1,6 +1,17 @@
 {% extends 'todo/base.html' %}
 
 {% block content %}
-<hr>
-Todos
+<h2>Todos</h2>
+<ul>
+  {% for todo in todos %}
+  <li>
+    {% if todo.urgent %}<b>{% endif %}
+      {{todo.title}}
+    {% if todo.urgent %}</b>{% endif %}
+    {% if todo.memo %}
+      - {{todo.memo}}
+    {% endif %}
+  </li>
+  {% endfor %}
+</ul>
 {% endblock %}

@@ -1,0 +1,9 @@
+{% extends 'todo/base.html' %}
+
+{% block content %}
+<h2>{{todo.title}}</h2>
+{% if todo.memo %}
+  <p>todo.memo</p>
+{% endif %}
+
+{% endblock %}
