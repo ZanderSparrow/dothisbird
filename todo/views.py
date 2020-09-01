@@ -83,7 +83,7 @@ def createtodo(request):
     else:
         return render(request, 'todo/createtodo.html', {'form': TodoForm()})
 
-def completetodo(request):
+def completetodo(request, todo_pk):
     todo = get_object_or_404(ToDo, pk=todo_pk, user=request.user)
     if request.method == 'POST':
         todo.completed = timezone.now()
