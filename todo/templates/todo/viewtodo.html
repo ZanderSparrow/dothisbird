@@ -2,8 +2,13 @@
 
 {% block content %}
 <h2>{{todo.title}}</h2>
-{% if todo.memo %}
-  <p>todo.memo</p>
-{% endif %}
+
+{{ error }}
+
+<form method="POST">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Save</button>
+</form>
 
 {% endblock %}

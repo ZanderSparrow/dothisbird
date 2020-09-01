@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
+from django.utils import timezone
 from .forms import TodoForm
 from .models import ToDo
 
@@ -56,8 +57,18 @@ def todos(request):
     return render(request, 'todo/todos.html', {'todos': todos})
 
 def viewtodo(request, todo_pk):
-    todo = get_object_or_404(ToDo, pk=todo_pk)
-    return render(request, 'todo/viewtodo.html', {'todo': todo})
+    todo = get_object_or_404(ToDo, pk=todo_pk, user=request.user)
+    
+    if request.method == 'POST':
+        form = TodoForm(request.POST, instance=todo)
+        try:
+            form.save()
+        except ValueError:
+            return render(request, 'todo/viewtodo.html', {'todo': todo, 'form': form, 'error': 'Bad info'})
+        return redirect('todos')
+    else:
+        form = TodoForm(instance=todo)
+        return render(request, 'todo/viewtodo.html', {'todo': todo, 'form': form})
 
 def createtodo(request):
     if request.method == 'POST':
@@ -71,3 +82,10 @@ def createtodo(request):
             return render(request, 'todo/createtodo.html', {'form': TodoForm(), 'error': 'Bad data'})
     else:
         return render(request, 'todo/createtodo.html', {'form': TodoForm()})
+
+def completetodo(request):
+    todo = get_object_or_404(ToDo, pk=todo_pk, user=request.user)
+    if request.method == 'POST':
+        todo.completed = timezone.now()
+        todo.save()
+        return redirect('todos')
