@@ -6,6 +6,15 @@ html, body {
   background-size: cover;
 }
 
+body {
+  font-family: 'Berkshire Swash', cursive;
+}
+
 .navbar {
   opacity: 0.66;
 }
+
+.home-list {
+  font-size: large;
+}
+

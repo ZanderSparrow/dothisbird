@@ -11,12 +11,19 @@
 
     <link rel="stylesheet" href="{% static 'todo/styles.css' %}">
 
+    <link href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap" rel="stylesheet">
+
     <title>Do This, Bird</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'todo/favicon.ico' %}"/>
+
   </head>
   <body>
     <!-- Nav bar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="{% url 'home' %}">Do This, Bird</a>
+      <a class="navbar-brand" href="{% url 'home' %}">
+        <img src="{% static 'todo/favicon-32x32.png' %}" width="30" height="30" class="d-inline-block align-top" alt="" loading="lazy">
+        Do This, Bird
+      </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
