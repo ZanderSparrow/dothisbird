@@ -12,6 +12,10 @@
   </head>
   <body>
     {% if user.is_authenticated %}
+      <a href="{% url 'home' %}">Todo Woo</a>
+      <a href="{% url 'todos' %}">Current Todos</a>
+      <a href="{% url 'createtodo' %}">Create</a>
+      <a href="{% url 'completedtodos' %}">Completed</a>
       Logged in as {{ user.username }}
       <form action="{% url 'logoutuser' %}" method=POST>
         {% csrf_token %}

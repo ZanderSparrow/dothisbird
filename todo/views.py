@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 from .forms import TodoForm
 from .models import ToDo
 
@@ -45,6 +46,7 @@ def loginuser(request):
     else:
         return render(request, 'todo/loginuser.html', {'form': AuthenticationForm()})
 
+@login_required
 def logoutuser(request):
     if request.method == 'POST':
         logout(request)
@@ -52,10 +54,17 @@ def logoutuser(request):
 
 
 # Todo
+@login_required
 def todos(request):
     todos = ToDo.objects.filter(user=request.user, completed__isnull=True)
     return render(request, 'todo/todos.html', {'todos': todos})
 
+@login_required
+def completedtodos(request):
+    todos = ToDo.objects.filter(user=request.user, completed__isnull=False)
+    return render(request, 'todo/completedtodos.html', {'todos': todos})
+
+@login_required
 def viewtodo(request, todo_pk):
     todo = get_object_or_404(ToDo, pk=todo_pk, user=request.user)
     
@@ -70,6 +79,7 @@ def viewtodo(request, todo_pk):
         form = TodoForm(instance=todo)
         return render(request, 'todo/viewtodo.html', {'todo': todo, 'form': form})
 
+@login_required
 def createtodo(request):
     if request.method == 'POST':
         try:
@@ -83,9 +93,22 @@ def createtodo(request):
     else:
         return render(request, 'todo/createtodo.html', {'form': TodoForm()})
 
+@login_required
 def completetodo(request, todo_pk):
     todo = get_object_or_404(ToDo, pk=todo_pk, user=request.user)
     if request.method == 'POST':
         todo.completed = timezone.now()
         todo.save()
         return redirect('todos')
+
+@login_required
+def deletetodo(request, todo_pk):
+    todo = get_object_or_404(ToDo, pk=todo_pk, user=request.user)
+    if request.method == 'POST':
+        try:
+            todo.delete()
+            return redirect('todos')
+        except:
+            form = TodoForm(instance=todo)
+            return render(request, 'todo/viewtodo.html', {'todo': todo, 'form': form, 'error': 'Error deleting todo'})
+
